@@ -1,10 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace FGWorms.Terrain
 {
+    [ExecuteInEditMode]
     public class MapGenerator : MonoBehaviour
     {
         public int Width;
@@ -12,7 +11,7 @@ namespace FGWorms.Terrain
         public TerrainConfigSO TerrainConfig;
 
         public bool AutoUpdate;
-
+        
         [SerializeField]
         private MapDisplay _mapDisplay;
 
@@ -22,6 +21,14 @@ namespace FGWorms.Terrain
             var Mesh = MeshGenerator.GenerateTerrainMesh(noiseMap, TerrainConfig.HeightMultiplier);
             var Texture = TextureGenerator.TextureFromHeightMap(noiseMap);
             _mapDisplay.DrawMesh(Mesh, Texture, TerrainConfig.GroundTexture);
+        }
+
+        private void Update()
+        {
+            if (AutoUpdate)
+            {           
+                GenerateMap();
+            }
         }
     }
 }
