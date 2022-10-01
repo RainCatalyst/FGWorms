@@ -40,6 +40,7 @@ namespace FGWorms.Setup
         public void Begin()
         {
             GameOptions.TerrainConfig = _currentConfig;
+            GameOptions.PlayerCount = 3;
             // Start game
             TransitionManager.Instance.OpenLevel();
         }

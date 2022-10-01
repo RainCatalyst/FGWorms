@@ -517,6 +517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75d38d2a568447c6b39ed43fc01c968b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MeshRenderer: {fileID: 405131848}
 --- !u!43 &477614208
 Mesh:
   m_ObjectHideFlags: 0
@@ -786,6 +787,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mapDisplay: {fileID: 405131852}
+  DefaultConfig:
+    Width: 0
+    Height: 0
+    Seed: 0
+    TerrainConfig: {fileID: 0}
 --- !u!4 &736714543
 Transform:
   m_ObjectHideFlags: 0

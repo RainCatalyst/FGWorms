@@ -2,9 +2,8 @@ using System;
 using FGWorms.Global;
 using FGWorms.Terrain;
 using UnityEngine;
-using FGWorms.Universal;
 
-namespace Modules.Level
+namespace FGWorms.Level
 {
     public class LevelStartup : MonoBehaviour
     {
