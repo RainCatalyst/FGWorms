@@ -19,6 +19,9 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField]
     private float _jumpSpeed = 10f;
     
+    // [Header("Rotation")]
+    // private float _rotationSmooth = 12f;
+    
     [Header("Ground")]
     [SerializeField]
     private LayerMask _groundLayers;
@@ -32,16 +35,12 @@ public class CharacterMovement : MonoBehaviour
     private bool _isGrounded;
     private RaycastHit _groundInfo = new() { normal = Vector3.up };
     private int _stepsSinceGrounded;
-
     private Rigidbody _rb;
+    
     // Input
     private bool _inputJump;
     private Vector2 _inputMove;
-    // private bool _isGrounded;
-    // private Vector3 _groundNormal = Vector3.up;
-    // private Vector3 _groundPos;
-    // private Vector2 _input;
-    //
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -60,17 +59,18 @@ public class CharacterMovement : MonoBehaviour
         _currentDirection = Vector3.Lerp(_currentDirection, direction, _speedSmooth * Time.fixedDeltaTime);
 
         float verticalVelocity = Vector3.Dot(_rb.velocity, _groundInfo.normal);
-        Vector3 velocity = direction * _speed + _groundInfo.normal * verticalVelocity;;
+        var oldVelocity = _rb.velocity;
+        Vector3 velocity = direction * _speed + _groundInfo.normal * verticalVelocity;
         _rb.velocity = velocity;
         
         // Realign with ground
         if (_stepsSinceGrounded == 1)
         {
             Vector3 groundNormal = GetClosestGroundNormal();
-            float speed = velocity.magnitude;
-            float dot = Vector3.Dot(velocity, groundNormal);
-            _rb.velocity = (velocity - groundNormal * dot).normalized * speed;
-            print("Realigning");
+            float speed = oldVelocity.magnitude;
+            float dot = Vector3.Dot(oldVelocity, groundNormal);
+            if (dot > 0f)
+                _rb.velocity = (oldVelocity - groundNormal * dot).normalized * speed;
         }
 
         // Jumping
@@ -78,7 +78,7 @@ public class CharacterMovement : MonoBehaviour
         {
             _inputJump = false;
             // Jump
-            print("Jumped");
+            Jump();
         }
     }
 
@@ -93,30 +93,14 @@ public class CharacterMovement : MonoBehaviour
     {
         _rb.velocity += _groundInfo.normal * _jumpSpeed;
     }
-
-    // private void Move()
+    
+    // private void Rotate()
     // {
-    //     Vector3 direction = GetForward() * _input.y + GetRight() * _input.x;
-    //     // direction = Vector3.ProjectOnPlane(direction, _groundNormal);
-    //     Vector3 velocity = direction * _speed;
-    //     if (_isGrounded)
-    //     {
-    //         float dot = Vector3.Dot(velocity, _groundNormal);
-    //         _rb.velocity = (velocity - _groundNormal * dot).normalized * _speed;
-    //     }
-    //     else
-    //     {
-    //         _rb.velocity = velocity;
-    //     }
+    //     var forward = GetForward();
+    //     float angle = Mathf.Acos(forward.z) * Mathf.Rad2Deg;
+    //     angle = forward.x < 0f ? 360f - angle : angle;
+    //     transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, angle, 0), _rotationSmooth * Time.deltaTime);
     // }
-
-    private void Rotate()
-    {
-        var forward = GetForward();
-        float angle = Mathf.Acos(forward.z) * Mathf.Rad2Deg;
-        angle = forward.x < 0f ? 360f - angle : angle;
-        transform.rotation = Quaternion.Euler(0, angle, 0);
-    }
 
     private void UpdateGround()
     {
@@ -136,15 +120,10 @@ public class CharacterMovement : MonoBehaviour
     private Vector3 GetClosestGroundNormal()
     {
         if (Physics.Raycast(_groundCheck.position, Vector3.down, 
-                out RaycastHit hitInfo, _groundDistance * 4f, _groundLayers))
+                out RaycastHit hitInfo, _groundDistance * 100f, _groundLayers))
         {
             return hitInfo.normal;
         }
         return Vector3.up;
     }
-
-    // private void OnDrawGizmos()
-    // {
-    //     Gizmos.DrawLine(transform.position, transform.position + _rb.velocity * 5f);    
-    // }
 }
