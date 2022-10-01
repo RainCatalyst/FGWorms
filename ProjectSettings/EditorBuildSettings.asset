@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Modules/Setup/Setup.unity
     guid: 5c7b3a3795f189944a4d888bf06de42a
   - enabled: 1
-    path: Assets/Modules/Game/Game.unity
+    path: Assets/Modules/Level/Level.unity
     guid: 6e3f16bca9b5adf4cafe0e81571521fd
+  - enabled: 1
+    path: Assets/Modules/Global/Master.unity
+    guid: 07ad6bfade2233044a10f957433d81c4
   m_configObjects: {}

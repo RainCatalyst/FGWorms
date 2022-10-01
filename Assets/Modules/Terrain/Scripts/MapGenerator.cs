@@ -8,6 +8,8 @@ namespace FGWorms.Terrain
         [SerializeField]
         private MapDisplay _mapDisplay;
 
+        public MapConfig DefaultConfig;
+
         public void GenerateMap(MapConfig config)
         {
             var terrainConfig = config.TerrainConfig;

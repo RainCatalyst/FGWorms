@@ -11,15 +11,19 @@ namespace FGWorms.Setup
 {
     public class LevelSetup : MonoBehaviour
     {
+        [Header("Terrain Config")]
         [SerializeField]
-        private MapGenerator _mapGenerator;
+        private MapConfig _currentConfig;
         [SerializeField]
         private TerrainConfigSO[] _terrainPresets;
+        
+        [Header("UI")]
         [SerializeField]
         private TMP_Dropdown _presetDropdown;
         
+        [Header("Other")]
         [SerializeField]
-        private MapConfig _currentConfig;
+        private MapGenerator _mapGenerator;
 
         public void SetTerrainPreset(int index)
         {
@@ -37,6 +41,7 @@ namespace FGWorms.Setup
         {
             GameOptions.TerrainConfig = _currentConfig;
             // Start game
+            TransitionManager.Instance.OpenLevel();
         }
 
         private void RefreshTerrain()

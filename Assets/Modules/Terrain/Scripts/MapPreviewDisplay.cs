@@ -6,9 +6,9 @@ namespace FGWorms.Terrain
     {
         public override void DrawMesh(MeshData meshData, Texture2D texture, Texture2D groundTexture)
         {
-            _meshRenderer.GetComponent<MeshFilter>().sharedMesh = meshData.CreateMesh();
-            _meshRenderer.sharedMaterial.mainTexture = texture;
-            _meshRenderer.sharedMaterial.SetTexture("_ColorMapTex", groundTexture);
+            MeshRenderer.GetComponent<MeshFilter>().sharedMesh = meshData.CreateMesh();
+            MeshRenderer.sharedMaterial.mainTexture = texture;
+            MeshRenderer.sharedMaterial.SetTexture("_ColorMapTex", groundTexture);
         }
     }
 }

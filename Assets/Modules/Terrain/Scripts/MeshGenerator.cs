@@ -17,7 +17,13 @@ namespace FGWorms.Terrain
             {
                 for (int x = 0; x < width; x++)
                 {
-                    meshData.Vertices[vertexIndex] = new Vector3(x - topLeftX, heightMap[x, y] * multiplier, y - topLeftZ );
+                    float vertexHeight = heightMap[x, y] * multiplier;
+                    // Pin corners
+                    if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
+                    {
+                        vertexHeight = 0;
+                    }
+                    meshData.Vertices[vertexIndex] = new Vector3(x - topLeftX, vertexHeight, y - topLeftZ );
                     meshData.Uvs[vertexIndex] = new Vector2(x / (float) width, y / (float) height); 
                     // Add triangles for each square expect the right/bottom corners
                     if (x < width - 1 && y < height - 1)

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
@@ -24,5 +23,8 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
             Destroy(gameObject);
         }
         _instance = this as T;
+        Init();
     }
+    
+    protected virtual void Init() { }
 }
