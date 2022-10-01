@@ -19,9 +19,18 @@ namespace FGWorms.Terrain
             public float Lacunarity;
         }
         
-        public static float[,] GenerateNoiseMap(int width, int height, NoiseOptions options)
+        public static float[,] GenerateNoiseMap(int width, int height, int seed, NoiseOptions options)
         {
             float[,] noiseMap = new float[width, height];
+            System.Random random = new System.Random(seed);
+            Vector2[] octaveOffsets = new Vector2[options.Octaves];
+            for (int i = 0; i < options.Octaves; i++)
+            {
+                float offsetX = random.Next(-10000, 10000);
+                float offsetY = random.Next(-10000, 10000);
+                octaveOffsets[i] = new Vector2(offsetX, offsetY);
+            }
+            
             options.Scale = Mathf.Clamp(options.Scale, 1e-3f, 1e5f);
             float maxNoiseHeight = float.MinValue, minNoiseHeight = float.MaxValue;
 
@@ -35,8 +44,8 @@ namespace FGWorms.Terrain
                     
                     for (int i = 0; i < options.Octaves; i++)
                     {
-                        float sampleX = x / options.Scale * frequency;
-                        float sampleY = y / options.Scale * frequency;
+                        float sampleX = x / options.Scale * frequency + octaveOffsets[i].x;
+                        float sampleY = y / options.Scale * frequency + octaveOffsets[i].y;
 
                         float noiseValue = 1 - 2 * Mathf.PerlinNoise(sampleX, sampleY);
                         noiseHeight += noiseValue * amplitude;

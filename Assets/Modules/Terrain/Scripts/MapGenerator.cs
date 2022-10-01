@@ -3,32 +3,18 @@ using UnityEngine;
 
 namespace FGWorms.Terrain
 {
-    [ExecuteInEditMode]
     public class MapGenerator : MonoBehaviour
     {
-        public int Width;
-        public int Height;
-        public TerrainConfigSO TerrainConfig;
-
-        public bool AutoUpdate;
-        
         [SerializeField]
         private MapDisplay _mapDisplay;
 
-        public void GenerateMap()
+        public void GenerateMap(MapConfig config)
         {
-            float[,] noiseMap = Noise.GenerateNoiseMap(Width, Height, TerrainConfig.NoiseOptions);
-            var Mesh = MeshGenerator.GenerateTerrainMesh(noiseMap, TerrainConfig.HeightMultiplier);
+            var terrainConfig = config.TerrainConfig;
+            float[,] noiseMap = Noise.GenerateNoiseMap(config.Width, config.Height, config.Seed, terrainConfig.NoiseOptions);
+            var Mesh = MeshGenerator.GenerateTerrainMesh(noiseMap, terrainConfig.HeightMultiplier);
             var Texture = TextureGenerator.TextureFromHeightMap(noiseMap);
-            _mapDisplay.DrawMesh(Mesh, Texture, TerrainConfig.GroundTexture);
-        }
-
-        private void Update()
-        {
-            if (AutoUpdate)
-            {           
-                GenerateMap();
-            }
+            _mapDisplay.DrawMesh(Mesh, Texture, terrainConfig.GroundTexture);
         }
     }
 }
