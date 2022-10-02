@@ -48,7 +48,6 @@ public class CustomCharacterController : MonoBehaviour
     bool inputJump;
 
     // Variables
-    Quaternion headRotation = Quaternion.identity;
     Vector3 velocity;
     Vector3 smoothHorizontalVelocity;
     Vector3 horizontalVelocity;
@@ -61,6 +60,9 @@ public class CustomCharacterController : MonoBehaviour
     float jumpQueueTimer;
     float coyoteJumpTimer;
     bool jumpQueued;
+    
+    private Vector3 GetForward() => new Vector3(forwardSource.forward.x, 0, forwardSource.forward.z).normalized;
+    private Vector3 GetRight() => new Vector3(forwardSource.right.x, 0, forwardSource.right.z).normalized;
 
     public void SetMoveAxis(Vector2 axis) => inputAxis = axis;
 
@@ -139,12 +141,15 @@ public class CustomCharacterController : MonoBehaviour
         RaycastHit hit;
         Vector3 castSource = transform.position - Vector3.up * (controller.skinWidth + controller.height * 0.5f);
         float castDistance = controller.radius + slipCheckDistance;
-        if (Physics.Raycast(castSource, forwardSource.forward, out hit, castDistance, groundLayers)){
+
+        Vector3 Forward = GetForward();
+        Vector3 Right = GetRight();
+        if (Physics.Raycast(castSource, Forward, out hit, castDistance, groundLayers)){
             FixSlip(hit.normal);
         }
-        if (Physics.Raycast(castSource, -forwardSource.forward, out hit, castDistance, groundLayers)
-            || Physics.Raycast(castSource, forwardSource.right, out hit, castDistance, groundLayers)
-            || Physics.Raycast(castSource, -forwardSource.right, out hit, castDistance, groundLayers))
+        if (Physics.Raycast(castSource, -Forward, out hit, castDistance, groundLayers)
+            || Physics.Raycast(castSource, Right, out hit, castDistance, groundLayers)
+            || Physics.Raycast(castSource, -Right, out hit, castDistance, groundLayers))
         {
             FixSlip(hit.normal);
         }
@@ -158,7 +163,7 @@ public class CustomCharacterController : MonoBehaviour
     {
         float moveSmooth = isGrounded ? groundAcceleration : airAcceleration;
 
-        Vector3 targetHorizontalVelocity = (forwardSource.right * inputAxis.x + forwardSource.forward * inputAxis.y) * walkSpeed;
+        Vector3 targetHorizontalVelocity = (GetRight() * inputAxis.x + GetForward() * inputAxis.y) * walkSpeed;
         smoothHorizontalVelocity = Vector3.Lerp(smoothHorizontalVelocity, targetHorizontalVelocity, Time.deltaTime * moveSmooth);
         horizontalVelocity = smoothHorizontalVelocity;
     }
@@ -203,7 +208,6 @@ public class CustomCharacterController : MonoBehaviour
         }
 
         if (!isGrounded && controller.velocity.y < 0) {
-            print("Checking slip");
             CheckEdge();
         }
 
