@@ -6,20 +6,20 @@ public class StateMachine : MonoBehaviour
 {
     public BaseState CurrentState { get; private set; }
 
-    void Start()
+    private void Start()
     {
         CurrentState = GetInitialState();
         CurrentState?.Enter();
     }
 
-    void Update()
+    private void Update()
     {
         CurrentState?.Update();
     }
 
     public void ChangeState(BaseState newState)
     {
-        CurrentState.Exit();
+        CurrentState?.Exit();
         CurrentState = newState;
         CurrentState.Enter();
     }

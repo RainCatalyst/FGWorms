@@ -42,9 +42,8 @@ namespace FGWorms.Player
             _controller = GetComponent<CharacterController>();
         }
 
-        public void Move()
+        public void Move(Vector2 moveInput)
         {
-            Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             Vector3 direction = GetForward() * moveInput.y + GetRight() * moveInput.x;
             _currentDirection = Vector3.Lerp(_currentDirection, direction, _speedSmooth * Time.fixedDeltaTime);
 

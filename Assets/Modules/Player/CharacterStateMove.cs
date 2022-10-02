@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace FGWorms.Player
 {
     public class CharacterStateMove : BaseState
@@ -10,8 +12,9 @@ namespace FGWorms.Player
 
         public override void Update()
         {
+            Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             _sm.Movement.UpdateGround();
-            _sm.Movement.Move();
+            _sm.Movement.Move(moveInput);
             _sm.Movement.Rotate();
         }
     }
