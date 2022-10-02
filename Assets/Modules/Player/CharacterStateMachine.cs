@@ -13,7 +13,7 @@ namespace FGWorms.Player
         [HideInInspector]
         public CharacterStateMove StateMove;
 
-        public CharacterMovement Movement;
+        public CustomCharacterController Controller;
         
         private void Awake()
         {

@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 namespace FGWorms.Player
 {
     [RequireComponent(typeof(CharacterController))]
-    public class CharacterMovement : MonoBehaviour
+    public class CharacterMovementSimple : MonoBehaviour
     {
         private Vector3 GetForward() => new Vector3(_inputSpace.forward.x, 0, _inputSpace.forward.z).normalized;
         private Vector3 GetRight() => new Vector3(_inputSpace.right.x, 0, _inputSpace.right.z).normalized;
@@ -29,13 +30,16 @@ namespace FGWorms.Player
         [SerializeField]
         private Transform _groundCheck;
         [SerializeField]
-        private float _groundDistance = 0.1f;
+        private float _groundCheckDistance = 0.1f;
+        [SerializeField]
+        private float _groundCheckRadius = 0.05f;
 
         // State
         private CharacterController _controller;
         private bool _isGrounded;
         private float _verticalVelocity;
         private Vector3 _currentDirection;
+        private bool _wasGrounded;
 
         private void Awake()
         {
@@ -62,20 +66,36 @@ namespace FGWorms.Player
 
         public void UpdateGround()
         {
-            if (Physics.Raycast(_groundCheck.position, Vector3.down,
-                    out RaycastHit hitInfo, _groundDistance, _groundLayers))
+            // _isGrounded = Physics.SphereCast(_groundCheck.position, _groundCheckRadius,
+            //     Vector3.down, out RaycastHit hitInfo, _groundCheckDistance, _groundLayers);
+            _isGrounded = IsGrounded();
+
+            if (!_isGrounded && _wasGrounded)
             {
-                _isGrounded = true;
-            }
-            else
-            {
-                _isGrounded = false;
+                // Move down
+                _controller.Move( _gravity * Time.deltaTime * Vector3.down);
+                // Recheck grounded
+                _isGrounded = IsGrounded();
             }
             
+            print($"Raycast: {_isGrounded}, Body: {_controller.isGrounded}");
+            
+            _wasGrounded = _isGrounded;
+            // Reset velocity when grounded
             if (_isGrounded)
-            {
                 _verticalVelocity = 0;
-            }
+        }
+
+        private bool IsGrounded()
+        {
+            return Physics.SphereCast(_groundCheck.position, _groundCheckRadius,
+            Vector3.down, out RaycastHit hitInfo, _groundCheckDistance, _groundLayers);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawLine(_groundCheck.position, _groundCheck.position + Vector3.down * _groundCheckDistance);
+            Gizmos.DrawWireSphere(_groundCheck.position + Vector3.down * _groundCheckDistance, _groundCheckRadius);
         }
     }
 }
