@@ -17,21 +17,20 @@ public class CustomCharacterController : MonoBehaviour
 
     [Header("Jump Settings")]
     [SerializeField] private float _jumpHeight = 1.5f;
-    [SerializeField] private float _airAcceleration = 8.0f;
+    [SerializeField] private float _jumpDistance = 3f;
+    [SerializeField] private float _airAcceleration = 0.5f;
     [SerializeField] private float _fallMultiplier = 0.5f;
     [SerializeField] private float _jumpMultiplier = 0.5f;
-    [SerializeField] private float _jumpQueueTime = 0.1f;
-    [SerializeField] private float _coyoteJumpTime = 0.1f;
+
+    [Header("Rotation Settings")]
+    [SerializeField] private float _rotationSmooth = 18f;
 
     [Header("Gravity Settings")]
     [SerializeField] private float _gravity = 30.0f;
-    [SerializeField] private float _maxVelocity = 30f;
 
     [Header("Ground Settings")]
     [SerializeField] LayerMask _groundLayers;
     [SerializeField] private float _groundCheckDistance = 0.1f;
-    [SerializeField] private float _slipCheckDistance = 0.2f;
-    [SerializeField] private float _slipSpeed = 1f;
 
     public UnityAction Jumped;
     public UnityAction Landed;
@@ -43,16 +42,17 @@ public class CustomCharacterController : MonoBehaviour
 
     // Input
     private Vector2 _inputAxis;
-    private Vector2 _mouseAxis;
-    private Vector2 _turnAxis;
     private bool _inputHoldJump;
     private bool _inputJump;
+    private float _inputJumpStrength;
+    private bool JustJumped;
 
     // Variables
     private Vector3 _velocity;
     private Vector3 _smoothHorizontalVelocity;
     private Vector3 _horizontalVelocity;
     private Vector3 _verticalVelocity;
+    private Quaternion _targetRotation;
     private Vector3 _groundNormal = Vector3.up;
     private Vector3 _slopeNormal = Vector3.up;
     private bool _isGrounded;
@@ -63,7 +63,18 @@ public class CustomCharacterController : MonoBehaviour
     private Vector3 GetRight() => new Vector3(forwardSource.right.x, 0, forwardSource.right.z).normalized;
     
     public void SetMoveAxis(Vector2 axis) => _inputAxis = axis;
-    public void SetJump() => _inputJump = true;
+
+    public void SetJump(float strength)
+    { 
+        _inputJump = true;
+        _inputJumpStrength = strength;
+    }
+
+    public void FaceForward()
+    {
+        _targetRotation = Quaternion.LookRotation(GetForward());
+    }
+
 
     private void Awake()
     {
@@ -86,11 +97,10 @@ public class CustomCharacterController : MonoBehaviour
     private void Update()
     {
         CheckGround();
-        // CheckSlopes();
-        // CheckCeiling();
-        HorizontalMove();
-        VerticalMove();
+        ComputeHorizontalVelocity();
+        ComputeVerticalVelocity();
         Move();
+        Rotate();
     }
 
     private void CheckGround()
@@ -103,7 +113,8 @@ public class CustomCharacterController : MonoBehaviour
 
         _groundNormal = isNowGrounded ? hitInfo.normal : Vector3.up;
 
-        if (isNowGrounded && !_isGrounded) {
+        if (isNowGrounded && !_isGrounded)
+        {
             // Snap to ground
             _controller.Move(Vector3.down * (transform.position.y - hitInfo.point.y));
             Landed?.Invoke();
@@ -116,61 +127,7 @@ public class CustomCharacterController : MonoBehaviour
         #endif
     }
 
-    private void CheckSlopes()
-    {
-        RaycastHit hitInfo;
-        float checkRadius = _controller.radius;
-        float checkDistance = (_controller.skinWidth + _groundCheckDistance);
-        bool isNowSloped = Physics.SphereCast(
-            transform.position + Vector3.up * (checkRadius - _controller.height * 0.5f), checkRadius,
-            Vector3.down, out hitInfo, checkDistance, _groundLayers);
-        if (isNowSloped)
-            _slopeNormal = hitInfo.normal;
-        else
-            _slopeNormal = Vector3.up;
-
-        _isSloped = isNowSloped;
-    }
-
-    private void CheckCeiling()
-    {
-        RaycastHit hitInfo;
-        float checkDistance = (_controller.height * 0.5f + _controller.skinWidth + _groundCheckDistance);
-        bool isNowCeiled = Physics.Raycast(
-            transform.position + _controller.center,
-            Vector3.up, out hitInfo, checkDistance, _groundLayers);
-        if (isNowCeiled && !_isCeiled)
-            OnCeiled();
-        _isCeiled = isNowCeiled;
-
-        #if UNITY_EDITOR
-            Debug.DrawLine(transform.position + _controller.center, transform.position + _controller.center + Vector3.up * checkDistance, Color.blue);
-        #endif
-    }
-
-    private void CheckEdge() {
-        RaycastHit hit;
-        Vector3 castSource = transform.position - Vector3.up * (_controller.skinWidth + _controller.height * 0.5f);
-        float castDistance = _controller.radius + _slipCheckDistance;
-
-        Vector3 Forward = GetForward();
-        Vector3 Right = GetRight();
-        if (Physics.Raycast(castSource, Forward, out hit, castDistance, _groundLayers)){
-            FixSlip(hit.normal);
-        }
-        if (Physics.Raycast(castSource, -Forward, out hit, castDistance, _groundLayers)
-            || Physics.Raycast(castSource, Right, out hit, castDistance, _groundLayers)
-            || Physics.Raycast(castSource, -Right, out hit, castDistance, _groundLayers))
-        {
-            FixSlip(hit.normal);
-        }
-    }
-
-    private void FixSlip(Vector3 direction) {
-        _controller.Move((direction * _slipSpeed + Vector3.down * 0.5f) * Time.deltaTime);
-    }
-
-    private void HorizontalMove()
+    private void ComputeHorizontalVelocity()
     {
         float moveSmooth = _isGrounded ? _groundAcceleration : _airAcceleration;
 
@@ -179,15 +136,8 @@ public class CustomCharacterController : MonoBehaviour
         _horizontalVelocity = _smoothHorizontalVelocity;
     }
 
-    private void VerticalMove()
+    private void ComputeVerticalVelocity()
     {
-        if (_inputJump)
-        {
-            if (IsGrounded)
-                Jump();
-            _inputJump = false;
-        }
-
         if (_isGrounded)
             _verticalVelocity = Vector3.zero;
 
@@ -198,38 +148,58 @@ public class CustomCharacterController : MonoBehaviour
         else if (verticalSpeed < 0f && !_inputHoldJump)
             gravityMultiplier += _jumpMultiplier;
         _verticalVelocity += Time.deltaTime * _gravity * gravityMultiplier * gravityDirection;
+        
+        if (_inputJump)
+        {
+            if (IsGrounded)
+                Jump();
+            _inputJump = false;
+        }
     }
 
     private void Move() 
     {
-        if (_isGrounded) {
+        if (_isGrounded)
+        {
             // Project horizontal velocity onto ground plane
             var projectedVelocity = Vector3.ProjectOnPlane(_horizontalVelocity, _groundNormal);
             _horizontalVelocity = projectedVelocity.normalized * _horizontalVelocity.magnitude;
             // Fix vertical slope movement
             if (_horizontalVelocity.y > 0f)
                 _horizontalVelocity -= _verticalVelocity;
-        }else if (_isSloped && Vector3.Angle(Vector3.up, _slopeNormal) > _controller.slopeLimit) {
-            // Sliding movement
+        }
+        else if (_isSloped && Vector3.Angle(Vector3.up, _slopeNormal) > _controller.slopeLimit)
+        {
+            // Slide
             _horizontalVelocity *= _slideVelocityMultiplier;
             var projectedVerticalVelocity = Vector3.ProjectOnPlane(_verticalVelocity, _slopeNormal);
             _verticalVelocity = projectedVerticalVelocity;
         }
-
-        if (!_isGrounded && _controller.velocity.y < 0) {
-            CheckEdge();
-        }
-
+        
         // Move using computed velocities
-        _controller.Move((_horizontalVelocity + _verticalVelocity) * Time.deltaTime);
+        _velocity = (_horizontalVelocity + _verticalVelocity) * Time.deltaTime;
+        _controller.Move(_velocity);
     }
 
-    public void Jump()
+    private void Rotate()
+    {
+        if (_horizontalVelocity.magnitude > 1e-2f)
+        {
+            Vector3 flatVelocity = new Vector3(_horizontalVelocity.x, 0, _horizontalVelocity.z);
+            _targetRotation = Quaternion.LookRotation(flatVelocity);
+        }
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation, _targetRotation, Time.deltaTime * _rotationSmooth);
+    }
+
+    private void Jump()
     {
         // Move up by ground check distance to avoid hitting ground next frame (if jump velocity is too low)
         _controller.Move(Vector3.up * _groundCheckDistance);
         // Compute the vertical velocity needed to reach jump height
-        _verticalVelocity = Vector3.up * Mathf.Sqrt(2f * _jumpHeight * _gravity);
+        _verticalVelocity = Mathf.Sqrt(2f * _jumpHeight * _gravity) * _inputJumpStrength * Vector3.up;
+        _horizontalVelocity = _jumpDistance * _inputJumpStrength * GetForward();
+        _smoothHorizontalVelocity = _horizontalVelocity;
         // Callback
         Jumped?.Invoke();
     }
@@ -238,6 +208,7 @@ public class CustomCharacterController : MonoBehaviour
     private void OnJumped()
     {
         // Reset isGrounded flag
+        JustJumped = true;
         _isGrounded = false;
         _isSloped = false;
         _groundNormal = Vector3.up;
@@ -248,10 +219,5 @@ public class CustomCharacterController : MonoBehaviour
         // Project current velocity onto the ground plane
         var projectedVelocity = Vector3.ProjectOnPlane(_verticalVelocity, _groundNormal);
         _verticalVelocity = projectedVelocity.normalized * _verticalVelocity.magnitude;
-    }
-
-    private void OnCeiled() {
-        // Reset velocity when touching ceiling
-        _verticalVelocity = Vector3.zero;
     }
 }

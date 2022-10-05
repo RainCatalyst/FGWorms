@@ -9,7 +9,9 @@ namespace FGWorms.Player
         private CharacterStateMachine _sm;
         
         [SerializeField]
-        private float _chargeDuration;
+        private float _chargeDuration = 1.5f;
+        [SerializeField]
+        private float _cancelDuration = 0.5f;
         [SerializeField]
         private GameObject _arcPreview;
 
@@ -25,6 +27,7 @@ namespace FGWorms.Player
         {
             _chargeTimer = 0;
             _sm.Controller.Landed += OnLanded;
+            _sm.Controller.FaceForward();
         }
         
         public override void Update()
@@ -33,8 +36,16 @@ namespace FGWorms.Player
 
             if (Input.GetMouseButtonUp(0))
             {
-                // Jump
-                _sm.Controller.SetJump();
+                if (_chargeTimer <= _cancelDuration)
+                {
+                    // Cancel jump, pressed too early
+                    _sm.ChangeState(_sm.StateMove);
+                }
+                else
+                {
+                    // Jump
+                    _sm.Controller.SetJump(_chargeTimer / _chargeDuration);
+                }
             }
         }
         

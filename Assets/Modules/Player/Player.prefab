@@ -153,20 +153,16 @@ MonoBehaviour:
   _walkSpeed: 4
   _groundAcceleration: 50
   _slideVelocityMultiplier: 0.5
-  _jumpHeight: 1.5
-  _airAcceleration: 8
+  _jumpHeight: 2.75
+  _jumpDistance: 12
+  _airAcceleration: 0.5
   _fallMultiplier: 0.5
   _jumpMultiplier: 0.5
-  _jumpQueueTime: 0.1
-  _coyoteJumpTime: 0.1
   _gravity: 30
-  _maxVelocity: 30
   _groundLayers:
     serializedVersion: 2
     m_Bits: 64
   _groundCheckDistance: 0.1
-  _slipCheckDistance: 0.2
-  _slipSpeed: 1
 --- !u!114 &8767459728185829095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StateJump:
-    _chargeDuration: 1
+    _chargeDuration: 1.5
+    _cancelDuration: 0.5
     _arcPreview: {fileID: 0}
   Controller: {fileID: 304157071611824332}
 --- !u!1 &7720646552858881513
