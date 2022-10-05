@@ -1,12 +1,15 @@
+using System;
+
+[Serializable]
 public class BaseState
 {
-    public string name;
-    protected StateMachine stateMachine;
+    public string Name { get; private set; }
+    protected StateMachine StateMachine;
 
-    public BaseState(string name, StateMachine stateMachine)
+    public virtual void Setup(string name, StateMachine stateMachine)
     {
-        this.name = name;
-        this.stateMachine = stateMachine;
+        Name = name;
+        StateMachine = stateMachine;
     }
 
     public virtual void Enter() { }

@@ -6,20 +6,17 @@ namespace FGWorms.Player
 {
     public class CharacterStateMachine : StateMachine
     {
-        [HideInInspector]
         public CharacterStateWait StateWait;
-        [HideInInspector]
-        public CharacterStateIdle StateIdle;
-        [HideInInspector]
         public CharacterStateMove StateMove;
+        public CharacterStateJump StateJump;
 
         public CustomCharacterController Controller;
         
         private void Awake()
         {
-            StateWait = new CharacterStateWait(this);
-            StateIdle = new CharacterStateIdle(this);
-            StateMove = new CharacterStateMove(this);
+            StateWait.Setup("Wait", this);
+            StateMove.Setup("Move", this);
+            StateJump.Setup("Jump", this);
         }
 
         protected override BaseState GetInitialState()
