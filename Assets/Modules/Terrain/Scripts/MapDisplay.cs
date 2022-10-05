@@ -9,10 +9,5 @@ namespace FGWorms.Terrain
         public MeshRenderer MeshRenderer;
 
         public virtual void DrawMesh(MeshData meshData, Texture2D texture, Texture2D groundTexture) { }
-
-        // protected virtual void Awake()
-        // {
-        //     _meshRenderer = GetComponent<MeshRenderer>();
-        // }
     }
 }
