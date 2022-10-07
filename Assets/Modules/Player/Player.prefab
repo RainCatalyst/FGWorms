@@ -186,16 +186,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forwardSource: {fileID: 0}
   _walkSpeed: 4
+  _slideSpeedMultiplier: 0.5
   _groundAcceleration: 50
-  _slideVelocityMultiplier: 0.5
   _jumpHeight: 3.25
   _jumpDistance: 11
   _airAcceleration: 0.5
   _fallMultiplier: 0.5
-  _jumpMultiplier: 0.5
   _slopeLimit: 0.95
   _rotationSmooth: 18
   _gravity: 30
+  _slideGravityMultiplier: 0.2
   _groundLayers:
     serializedVersion: 2
     m_Bits: 64
@@ -294,7 +294,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7720646552858881512
 Transform:
   m_ObjectHideFlags: 0

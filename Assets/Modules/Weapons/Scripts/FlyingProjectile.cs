@@ -10,6 +10,8 @@ namespace FGWorms.Gameplay
         private float _gravity;
         [SerializeField]
         private float _speed;
+        [SerializeField]
+        private Transform _trail;
         
         public override void Shoot(Vector3 direction, float velocityMultiplier)
         {
@@ -33,6 +35,7 @@ namespace FGWorms.Gameplay
             {
                 LevelManager.Instance.Map.UpdateMap(transform.position, 3, -0.1f);
             }
+            _trail.SetParent(null);
             Instantiate(_hitEffect, transform.position, Quaternion.identity);
             Destroy(gameObject);
             return true;
