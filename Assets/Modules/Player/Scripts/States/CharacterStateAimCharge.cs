@@ -25,17 +25,16 @@ namespace FGWorms.Gameplay
             // Only charge weapons will open this state
             _chargeDuration = (_sm.Weapon.Current as ChargeWeaponSO).ChargeTime;
             _chargeTimer = 0;
-            _sm.Controller.FaceForward(true);
+            _sm.Movement.FaceForward(true);
         }
 
         public override void Update()
         {
             _chargeTimer = Mathf.Clamp(_chargeTimer + Time.deltaTime, 0, _chargeDuration);
             
-            if (Input.GetButtonUp("Fire1"))
+            if (_sm.Input.ReleaseShoot)
             {
                 float multiplier = _chargeTimer / _chargeDuration;
-                Debug.Log($"Shooting with velocity {multiplier}");
                 _sm.Weapon.Shoot(_projectileTransform.position, _projectileTransform.forward, multiplier);
                 _sm.ChangeState(_sm.StateMove);
             }
@@ -43,8 +42,7 @@ namespace FGWorms.Gameplay
 
         public override void Exit()
         {
-            // LevelManager.Instance.Camera.ToggleFirstPerson(false);
-            // LevelManager.Instance.UI.ToggleReticle(false);
+            
         }
     }
 }

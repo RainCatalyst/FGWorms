@@ -4,7 +4,7 @@ using UnityEngine.Events;
 namespace FGWorms.Gameplay
 {
     [RequireComponent(typeof(CharacterController))]
-    public class CustomCharacterController : MonoBehaviour
+    public class CharacterMovement : MonoBehaviour
     {
         public UnityAction Jumped;
         public UnityAction Landed;

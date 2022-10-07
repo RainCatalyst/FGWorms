@@ -24,15 +24,15 @@ namespace FGWorms.Gameplay
         public override void Enter()
         {
             _chargeTimer = 0;
-            _sm.Controller.Landed += OnLanded;
-            _sm.Controller.FaceForward(true);
+            _sm.Movement.Landed += OnLanded;
+            _sm.Movement.FaceForward(true);
         }
         
         public override void Update()
         {
             _chargeTimer = Mathf.Clamp(_chargeTimer + Time.deltaTime, 0, _chargeDuration);
 
-            if (Input.GetButtonUp("Jump"))
+            if (_sm.Input.ReleaseJump)
             {
                 if (_chargeTimer <= _cancelDuration)
                 {
@@ -42,14 +42,14 @@ namespace FGWorms.Gameplay
                 else
                 {
                     // Jump
-                    _sm.Controller.SetJump(_chargeTimer / _chargeDuration);
+                    _sm.Movement.SetJump(_chargeTimer / _chargeDuration);
                 }
             }
         }
         
         public override void Exit()
         {
-            _sm.Controller.Landed -= OnLanded;
+            _sm.Movement.Landed -= OnLanded;
         }
 
         private void OnLanded()

@@ -16,14 +16,13 @@ namespace FGWorms.Gameplay
 
         public override void Update()
         {
-            Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            _sm.Controller.SetMoveAxis(moveInput);
+            _sm.Movement.SetMoveAxis(_sm.Input.Move);
 
-            if (Input.GetButtonDown("Jump"))
+            if (_sm.Input.PressJump)
             {
                 _sm.ChangeState(_sm.StateJump);
             }
-            else if (Input.GetButtonDown("Fire1"))
+            else if (_sm.Input.PressShoot)
             {
                 _sm.ChangeToWeaponState();
             }
@@ -31,7 +30,7 @@ namespace FGWorms.Gameplay
 
         public override void Exit()
         {
-            _sm.Controller.SetMoveAxis(Vector2.zero);
+            _sm.Movement.SetMoveAxis(Vector2.zero);
         }
     }
 }

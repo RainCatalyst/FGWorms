@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FGWorms.UI
 {
-    public class LevelUI : MonoBehaviour
+    public class LevelUI : MonoSingleton<LevelUI>
     {
         public void ToggleReticle(bool enabled) => _reticle.SetActive(enabled);
 
