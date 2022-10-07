@@ -7,14 +7,6 @@ namespace FGWorms.Gameplay
     [Serializable]
     public class CharacterStateAimCharge : BaseState
     {
-        [SerializeField]
-        private Transform _projectileTransform;
-        
-        private CharacterStateMachine _sm;
-
-        private float _chargeDuration;
-        private float _chargeTimer;
-
         public override void Setup(string name, StateMachine stateMachine)
         {
             base.Setup(name, stateMachine);
@@ -46,5 +38,12 @@ namespace FGWorms.Gameplay
         {
             LevelUI.Instance.SetChargeValue(0);
         }
+        
+        [SerializeField]
+        private Transform _projectileTransform;
+        
+        private CharacterStateMachine _sm;
+        private float _chargeDuration;
+        private float _chargeTimer;
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5369510354416717878}
   - component: {fileID: 5369510354416717879}
   m_Layer: 0
-  m_Name: BigExplosion
+  m_Name: NUKE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96925d84eb1b8dd4a9f6a1fbb3b2e380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 8
+  _damage: 100
   _damageFalloff:
     serializedVersion: 2
     m_Curve:
@@ -70,13 +70,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _radius: 6
-  _terrainRadius: 5
-  _terrainDepth: 0.2
+  _radius: 25
+  _terrainRadius: 32
+  _terrainDepth: 0.3
   _mask:
     serializedVersion: 2
     m_Bits: 192
-  _velocity: 7
+  _velocity: 12
   _velocityFalloff:
     serializedVersion: 2
     m_Curve:
@@ -110,7 +110,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _upwardsLift: 0.4
+  _upwardsLift: 0.6
   _effect: {fileID: 6382676636018265277}
 --- !u!1 &6382676636018265266
 GameObject:
@@ -228,8 +228,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.5
-      minScalar: 0.1
+      scalar: 1
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -281,8 +281,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 20
-      minScalar: 7
+      scalar: 50
+      minScalar: 15
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1089,7 +1089,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 30
+        scalar: 256
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -2850,11 +2850,11 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
   NoiseModule:
-    enabled: 0
+    enabled: 1
     strength:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 1.75
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -3011,16 +3011,16 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     separateAxes: 0
-    frequency: 0.5
+    frequency: 0.25
     damping: 1
     octaves: 1
     octaveMultiplier: 0.5
     octaveScale: 2
-    quality: 2
+    quality: 1
     scrollSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.5
       minScalar: 0
       maxCurve:
         serializedVersion: 2

@@ -47,6 +47,15 @@ namespace FGWorms.Terrain
                     bestY - (_currentConfig.Height - 1) / 2f));
             }
 
+            object message = null;
+            message.GetType();
+
+            return new List<Vector3>()
+            {
+                new Vector3(21, 15, 25),
+                new Vector3(-8, 15, 0.5f),
+                new Vector3(6, 15, -18.5f)
+            };
             return points;
         }
         

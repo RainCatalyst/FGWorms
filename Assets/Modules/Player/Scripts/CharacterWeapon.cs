@@ -11,8 +11,6 @@ namespace FGWorms.Gameplay
 
         [SerializeField]
         private WeaponSO[] _weapons;
-        // [SerializeField]
-        // private Transform _shootPoint;
         private int _weaponIndex;
 
         public void Shoot(Vector3 position, Vector3 direction, float charge)

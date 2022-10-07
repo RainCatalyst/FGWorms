@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,6 +8,9 @@ namespace FGWorms.Universal
     [DefaultExecutionOrder(int.MinValue)]
     public class Startup : MonoBehaviour
     {
+        public UnityEvent InitializeEvent;
+        public static bool Initialized;
+        
         private void Awake()
         {
             if (Initialized)
@@ -24,8 +26,5 @@ namespace FGWorms.Universal
             yield return null;
             Destroy(gameObject);
         }
-
-        public UnityEvent InitializeEvent;
-        public static bool Initialized;
     }
 }

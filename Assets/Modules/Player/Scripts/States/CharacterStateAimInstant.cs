@@ -7,11 +7,6 @@ namespace FGWorms.Gameplay
     [Serializable]
     public class CharacterStateAimInstant : BaseState
     {
-        [SerializeField]
-        private Transform _projectileTransform;
-        
-        private CharacterStateMachine _sm;
-
         public override void Setup(string name, StateMachine stateMachine)
         {
             base.Setup(name, stateMachine);
@@ -36,5 +31,10 @@ namespace FGWorms.Gameplay
         {
             
         }
+        
+        [SerializeField]
+        private Transform _projectileTransform;
+        
+        private CharacterStateMachine _sm;
     }
 }

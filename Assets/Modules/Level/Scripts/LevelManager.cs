@@ -113,7 +113,7 @@ namespace FGWorms.Gameplay
         {
             bool draw = player == null;
             if (draw)
-                _playerCamera.SetFollowTarget(_mapOverview, false, 18f);
+                _playerCamera.SetFollowTarget(_mapOverview, false, 32f);
             else
                 _playerCamera.SetFollowTarget(player.Turn.CameraFocus, false);
             // _playerCamera.SetFollowTarget(_mapOverview, false);
