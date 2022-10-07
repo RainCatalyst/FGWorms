@@ -168,6 +168,7 @@ namespace FGWorms.Gameplay
 
         private List<BaseCharacterController> _players;
         private int _playerIndex;
+        private List<TurnParticipant> _participants;
         private TurnParticipant _currentParticipant;
         private Coroutine _coEndTurn;
     }

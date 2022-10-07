@@ -72,6 +72,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _radius: 4
   _terrainRadius: 3
+  _terrainDepth: 0.1
   _mask:
     serializedVersion: 2
     m_Bits: 192

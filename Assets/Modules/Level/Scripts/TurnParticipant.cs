@@ -26,6 +26,11 @@ namespace FGWorms.Gameplay
             Active = false;
         }
 
+        public void JoinTurn()
+        {
+            LevelManager.Instance.SetActiveParticipant(this);
+        }
+
         public void YieldTurn()
         {
             LevelManager.Instance.ClearActiveParticipant(this);
@@ -34,7 +39,7 @@ namespace FGWorms.Gameplay
         private void Awake()
         {
             if (_joinOnAwake)
-                LevelManager.Instance.SetActiveParticipant(this);
+                JoinTurn();
         }
 
         private void OnDestroy()

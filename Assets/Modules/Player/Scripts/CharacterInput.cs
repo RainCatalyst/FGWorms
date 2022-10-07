@@ -9,6 +9,7 @@ namespace FGWorms.Gameplay
         public bool ReleaseJump;
         public bool PressShoot;
         public bool ReleaseShoot;
+        public bool WeaponCycle;
 
         public static CharacterInput GetUser() => new()
         {
@@ -16,7 +17,8 @@ namespace FGWorms.Gameplay
             PressJump = Input.GetButtonDown("Jump"),
             ReleaseJump = Input.GetButtonUp("Jump"),
             PressShoot = Input.GetButtonDown("Fire1"),
-            ReleaseShoot = Input.GetButtonUp("Fire1")
+            ReleaseShoot = Input.GetButtonUp("Fire1"),
+            WeaponCycle = Input.GetButtonDown("Cycle")
         };
     }
 }

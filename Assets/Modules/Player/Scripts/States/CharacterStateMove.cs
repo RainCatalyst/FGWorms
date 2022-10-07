@@ -28,6 +28,10 @@ namespace FGWorms.Gameplay
             {
                 _sm.ChangeToWeaponState();
             }
+            else if (_sm.Input.WeaponCycle)
+            {
+                _sm.Weapon.CycleWeapon(1);
+            }
         }
 
         public override void Exit()

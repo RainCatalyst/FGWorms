@@ -37,6 +37,7 @@ namespace FGWorms.Gameplay
             if (_sm.Input.ReleaseShoot)
             {
                 float multiplier = _chargeTimer / _chargeDuration;
+                _sm.ChangeState(_sm.StateMove);
                 _sm.Weapon.Shoot(_projectileTransform.position, _projectileTransform.forward, multiplier);
             }
         }

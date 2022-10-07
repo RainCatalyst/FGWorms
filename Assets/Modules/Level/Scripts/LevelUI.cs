@@ -36,11 +36,17 @@ namespace FGWorms.UI
         {
             StringBuilder builder = new();
             builder.Append("<b>Weapon</b> ");
-            builder.Append($"{weapons.Current.Name}");
-            foreach (var weapon in weapons.All)
+            // builder.Append($"{weapons.Current.Name}");
+            var Weapons = weapons.All;
+            for (int i = 0; i < Weapons.Count; i++)
             {
-                if (weapon != weapons.Current)
-                    builder.Append(" | <i>{weapon.Name}</i>");
+                if (i > 0)
+                    builder.Append(" | ");
+                var weapon = Weapons[i];
+                if (weapon == weapons.Current)
+                    builder.Append($"<b>{weapon.Name}</b>");
+                else
+                    builder.Append($"{weapon.Name}");
             }
             _weaponsText.text = builder.ToString();
         }

@@ -31,7 +31,7 @@ namespace FGWorms.Gameplay
                 
                 if (col.TryGetComponent<MapDisplay>(out MapDisplay display))
                 {
-                    LevelManager.Instance.Map.UpdateMap(transform.position, _terrainRadius, -0.1f);
+                    LevelManager.Instance.Map.UpdateMap(transform.position, _terrainRadius, -_terrainDepth);
                 }
             }
             _effect.SetParent(null);
@@ -55,6 +55,8 @@ namespace FGWorms.Gameplay
         private float _radius;
         [SerializeField]
         private int _terrainRadius;
+        [SerializeField]
+        private float _terrainDepth;
         [SerializeField]
         private LayerMask _mask;
         [SerializeField]
