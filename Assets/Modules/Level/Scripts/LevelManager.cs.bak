@@ -1,0 +1,89 @@
+using System.Collections;
+using System.Collections.Generic;
+using FGWorms.Global;
+using FGWorms.Terrain;
+using FGWorms.UI;
+using UnityEngine;
+
+namespace FGWorms.Gameplay
+{
+    public class LevelManager : MonoSingleton<LevelManager>
+    {
+        public PlayerCamera Camera => _playerCamera;
+        public MapGenerator Map => _mapGenerator;
+
+        public void AddTurnParticipant(TurnParticipant participant)
+        {
+            _turnParticipants.Add(participant);
+            RefreshTurnParticipants();
+        }
+
+        public void RemoveTurnParticipant(TurnParticipant participant)
+        {
+            if (participant.Active)
+                participant.EndTurn();
+            _turnParticipants.Remove(participant);
+            RefreshTurnParticipants();
+        }
+
+        private void Start()
+        {
+            _mapGenerator.GenerateMap(GameOptions.TerrainConfig);
+            RefreshTurnParticipants();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                NextTurn();
+            }
+        }
+
+        private void NextTurn()
+        {
+            _playerIndex++;
+            if (_playerIndex > _players.Length - 1)
+                _playerIndex = 0;
+            var currentPlayer = _players[_playerIndex];
+            currentPlayer.JoinTurnQueue();
+        }
+
+        private void RefreshTurnParticipants()
+        {
+            if (_turnParticipants.Count == 0)
+            {
+                // No participants left, start next turn
+                StartCoroutine(CoNextTurn());
+                return;
+            }
+
+            var newParticipant = _turnParticipants[0];
+            if (newParticipant == _currentParticipant)
+                return;
+            _currentParticipant = newParticipant;
+            _currentParticipant.StartTurn();
+            _playerCamera.SetFollowTarget(_currentParticipant.CameraFocus, _currentParticipant.AllowLook);
+        }
+
+        private IEnumerator CoNextTurn()
+        {
+            yield return new WaitForSecondsRealtime(_turnDelay);
+            NextTurn();
+        }
+
+        [SerializeField]
+        private MapGenerator _mapGenerator;
+        [SerializeField]
+        private PlayerCamera _playerCamera;
+        [SerializeField]
+        private TurnParticipant[] _players;
+        [SerializeField]
+        private float _turnDelay = 1f;
+
+        private int _playerIndex;
+        private List<TurnParticipant> _turnParticipants = new();
+        private TurnParticipant _currentParticipant;
+        private Coroutine _coFocus;
+    }
+}

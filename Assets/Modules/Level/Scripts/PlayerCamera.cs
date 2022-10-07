@@ -4,11 +4,14 @@ namespace FGWorms.Gameplay
 {
     public class PlayerCamera : MonoBehaviour
     {
-        public void ToggleFirstPerson(bool enable)
+        public Transform FollowTarget { get; private set; }
+
+        public void SetFollowTarget(Transform target, bool allowLook)
         {
-            _currentDistance = enable ? 0 : _distance;
+            FollowTarget = target;
+            _allowLook = allowLook;
         }
-        
+
         private void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -18,8 +21,11 @@ namespace FGWorms.Gameplay
 
         private void LateUpdate()
         {
-            GetAngles();
-            ConstrainAngles();
+            if (_allowLook)
+            {
+                GetAngles();
+                ConstrainAngles();
+            }
             UpdateTracking();
         }
 
@@ -59,7 +65,6 @@ namespace FGWorms.Gameplay
             transform.SetPositionAndRotation(_currentLookPosition - lookDirection * _currentDistance, lookRotation);
         }
 
-        public Transform FollowTarget;
         [Header("Follow Options")]
         [SerializeField]
         private float _distance = 10f;
@@ -75,5 +80,6 @@ namespace FGWorms.Gameplay
         private Vector3 _currentLookPosition;
         private Quaternion _currentLookRotation;
         private float _currentDistance;
+        private bool _allowLook;
     }
 }

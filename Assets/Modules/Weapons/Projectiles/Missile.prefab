@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7391415522513449267}
   - component: {fileID: 7391415522513449276}
   - component: {fileID: 7391415522513449277}
+  - component: {fileID: 3113368193863767328}
   m_Layer: 0
   m_Name: Missile
   m_TagString: Untagged
@@ -64,7 +65,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 10
-  _hitEffect: {fileID: 3734675802521514583, guid: 01bb647790fbbb949bc61b93dce063b8, type: 3}
+  _hitEffect: {fileID: 5369510354416717876, guid: 71301bcec8040d2408c7c98be45c3fa1, type: 3}
   _collisionMask:
     serializedVersion: 2
     m_Bits: 64
@@ -72,6 +73,21 @@ MonoBehaviour:
   _gravity: 30
   _speed: 30
   _trail: {fileID: 1491436723137410203}
+--- !u!114 &3113368193863767328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7391415522513449278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc8f0c4bd7687e4428e33e278a1aa3ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _joinOnAwake: 1
+  _allowLook: 0
+  _cameraFocus: {fileID: 7391415522513449267}
 --- !u!1 &7391415523367269963
 GameObject:
   m_ObjectHideFlags: 0

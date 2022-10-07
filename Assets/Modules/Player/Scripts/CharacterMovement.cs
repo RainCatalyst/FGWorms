@@ -26,6 +26,14 @@ namespace FGWorms.Gameplay
             }
         }
 
+        public void SetVelocity(Vector3 velocity)
+        {
+            _verticalVelocity = velocity;
+            _isGrounded = false;
+            _isSloped = false;
+            _controller.Move(Vector3.up * _groundCheckDistance);
+        }
+
         private void Awake()
         {
             // Fetch references

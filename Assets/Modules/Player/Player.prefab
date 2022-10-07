@@ -129,7 +129,8 @@ GameObject:
   - component: {fileID: 5411735028226865726}
   - component: {fileID: 5878890797946208557}
   - component: {fileID: 8294357152560929454}
-  m_Layer: 0
+  - component: {fileID: 8308931822790973962}
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,7 +219,6 @@ MonoBehaviour:
     _cancelDuration: 0.5
   StateAimCharge:
     _projectileTransform: {fileID: 1244841339190676893}
-  _cameraTarget: {fileID: 8024416783806723681}
 --- !u!114 &5411735028226865726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,6 +258,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b715c75c174949f5be214d2f9efca578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8308931822790973962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4425725519241753233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc8f0c4bd7687e4428e33e278a1aa3ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _joinOnAwake: 0
+  _allowLook: 1
+  _cameraFocus: {fileID: 8024416783806723681}
 --- !u!1 &4894339060523935003
 GameObject:
   m_ObjectHideFlags: 0
