@@ -1,18 +1,22 @@
-using System;
 using FGWorms.Global;
-using FGWorms.Player;
 using FGWorms.Terrain;
+using FGWorms.UI;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
-namespace FGWorms.Level
+namespace FGWorms.Gameplay
 {
     public class LevelManager : MonoSingleton<LevelManager>
     {
+        public PlayerCamera Camera => _playerCamera;
+        public LevelUI UI => _levelUI;
+        public MapGenerator Map => _mapGenerator;
+        
         [SerializeField]
         private MapGenerator _mapGenerator;
         [SerializeField]
         private PlayerCamera _playerCamera;
+        [SerializeField]
+        private LevelUI _levelUI;
 
         [SerializeField]
         private CharacterStateMachine[] _players;
@@ -27,7 +31,7 @@ namespace FGWorms.Level
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 _players[_playerIndex].ChangeState(_players[_playerIndex].StateWait);
                 _playerIndex++;
@@ -39,7 +43,7 @@ namespace FGWorms.Level
 
         private void FocusOnPlayer(int index)
         {
-            _playerCamera.FollowTarget = _players[index].transform;
+            _playerCamera.FollowTarget = _players[index].CameraTarget;
             _players[index].ChangeState(_players[index].StateMove);
         }
     }

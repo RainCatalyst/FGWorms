@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace FGWorms.Player
+namespace FGWorms.Gameplay
 {
     [Serializable]
     public class CharacterStateMove : BaseState
@@ -19,9 +19,13 @@ namespace FGWorms.Player
             Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             _sm.Controller.SetMoveAxis(moveInput);
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetButtonDown("Jump"))
             {
                 _sm.ChangeState(_sm.StateJump);
+            }
+            else if (Input.GetButtonDown("Fire1"))
+            {
+                _sm.ChangeToWeaponState();
             }
         }
 

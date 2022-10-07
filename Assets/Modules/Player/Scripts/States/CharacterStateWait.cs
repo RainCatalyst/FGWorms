@@ -1,6 +1,6 @@
 using System;
 
-namespace FGWorms.Player
+namespace FGWorms.Gameplay
 {
     [Serializable]
     public class CharacterStateWait : BaseState

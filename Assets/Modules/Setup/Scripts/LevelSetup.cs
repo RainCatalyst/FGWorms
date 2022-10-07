@@ -7,7 +7,7 @@ using FGWorms.Terrain;
 using TMPro;
 using UnityEngine.UI;
 
-namespace FGWorms.Setup
+namespace FGWorms.UI
 {
     public class LevelSetup : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace FGWorms.Player
+namespace FGWorms.Gameplay
 {
     [Serializable]
     public class CharacterStateJump : BaseState
@@ -12,10 +12,8 @@ namespace FGWorms.Player
         private float _chargeDuration = 1.5f;
         [SerializeField]
         private float _cancelDuration = 0.5f;
-        [SerializeField]
-        private GameObject _arcPreview;
 
-        private float _chargeTimer = 0;
+        private float _chargeTimer;
 
         public override void Setup(string name, StateMachine stateMachine)
         {
@@ -27,14 +25,14 @@ namespace FGWorms.Player
         {
             _chargeTimer = 0;
             _sm.Controller.Landed += OnLanded;
-            _sm.Controller.FaceForward();
+            _sm.Controller.FaceForward(true);
         }
         
         public override void Update()
         {
             _chargeTimer = Mathf.Clamp(_chargeTimer + Time.deltaTime, 0, _chargeDuration);
 
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetButtonUp("Jump"))
             {
                 if (_chargeTimer <= _cancelDuration)
                 {
@@ -56,7 +54,6 @@ namespace FGWorms.Player
 
         private void OnLanded()
         {
-            Debug.Log("Landed!");
             _sm.ChangeState(_sm.StateMove);
         }
     }

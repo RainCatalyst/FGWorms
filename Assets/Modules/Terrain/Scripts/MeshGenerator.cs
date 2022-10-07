@@ -24,7 +24,11 @@ namespace FGWorms.Terrain
                         vertexHeight = 0;
                     }
                     meshData.Vertices[vertexIndex] = new Vector3(x - topLeftX, vertexHeight, y - topLeftZ );
-                    meshData.Uvs[vertexIndex] = new Vector2(x / (float) width, y / (float) height); 
+                    meshData.Uvs[vertexIndex] = new Vector2(x / (float) width, y / (float) height);
+                    // if (x == 16 && y == 16)
+                    // {
+                    //     meshData.Vertices[vertexIndex] = new Vector3(x - topLeftX, 30, y - topLeftZ );
+                    // }
                     // Add triangles for each square expect the right/bottom corners
                     if (x < width - 1 && y < height - 1)
                     {

@@ -3,7 +3,7 @@ using FGWorms.Global;
 using FGWorms.Terrain;
 using UnityEngine;
 
-namespace FGWorms.Level
+namespace FGWorms.Gameplay
 {
     public class LevelStartup : MonoBehaviour
     {

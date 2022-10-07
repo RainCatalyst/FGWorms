@@ -1,13 +1,19 @@
 using UnityEngine;
 
-namespace FGWorms.Level
+namespace FGWorms.Gameplay
 {
     public class PlayerCamera : MonoBehaviour
     {
+        public void ToggleFirstPerson(bool enable)
+        {
+            _currentDistance = enable ? 0 : _distance;
+        }
+        
         private void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
             _currentLookPosition = transform.position;
+            _currentDistance = _distance;
         }
 
         private void LateUpdate()
@@ -50,7 +56,7 @@ namespace FGWorms.Level
             // _currentLookRotation =
             //     Quaternion.Lerp(_currentLookRotation, lookRotation, _rotationSmooth * Time.deltaTime);
             
-            transform.SetPositionAndRotation(_currentLookPosition - lookDirection * _distance, lookRotation);
+            transform.SetPositionAndRotation(_currentLookPosition - lookDirection * _currentDistance, lookRotation);
         }
 
         public Transform FollowTarget;
@@ -68,5 +74,6 @@ namespace FGWorms.Level
         private Vector2 _lookAngles = new(45, 0);
         private Vector3 _currentLookPosition;
         private Quaternion _currentLookRotation;
+        private float _currentDistance;
     }
 }
