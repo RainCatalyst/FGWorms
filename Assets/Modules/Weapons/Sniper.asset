@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 767c1d0b709144dabff40b19c76fa1b3, type: 3}
-  m_Name: Bomb
+  m_Script: {fileID: 11500000, guid: cccacd3635a04067a60c9a30c337a8b9, type: 3}
+  m_Name: Sniper
   m_EditorClassIdentifier: 
-  _name: Bomb
-  Projectile: {fileID: 643278199303684605, guid: 029963b8f942c6f4a9d4ac75e400f007, type: 3}
-  _chargeTime: 0.5
+  _name: Sniper
+  Projectile: {fileID: 7391415522513449277, guid: eb0b7b559b165844481d1a1e94d8359b, type: 3}

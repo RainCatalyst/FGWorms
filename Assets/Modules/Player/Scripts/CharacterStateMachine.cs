@@ -13,6 +13,7 @@ namespace FGWorms.Gameplay
         public CharacterStateMove StateMove;
         public CharacterStateJump StateJump;
         public CharacterStateAimCharge StateAimCharge;
+        public CharacterStateAimInstant StateAimInstant;
 
         public CharacterMovement Movement { get; private set; }
         public Health Health { get; private set; }
@@ -46,6 +47,12 @@ namespace FGWorms.Gameplay
                 return true;
             }
 
+            if (currentWeapon is InstantWeaponSO)
+            {
+                ChangeState(StateAimInstant);
+                return true;
+            }
+
             return false;
         }
 
@@ -65,7 +72,8 @@ namespace FGWorms.Gameplay
             StateWait.Setup("Wait", this);
             StateMove.Setup("Move", this);
             StateJump.Setup("Jump", this);
-            StateAimCharge.Setup("Aim", this);
+            StateAimCharge.Setup("AimCharge", this);
+            StateAimInstant.Setup("AimInstant", this);
         }
 
         protected override BaseState GetInitialState() => StateWait;

@@ -2,19 +2,14 @@ using UnityEngine;
 
 namespace FGWorms.Gameplay
 {
-    [CreateAssetMenu(menuName = "Weapons/Charge Weapon")]
-    public class ChargeWeaponSO : WeaponSO
+    [CreateAssetMenu(menuName = "Weapons/Instant Weapon")]
+    public class InstantWeaponSO : WeaponSO
     {
-        public float ChargeTime => _chargeTime;
-        
         public override void Shoot(Vector3 point, Vector3 direction, float charge)
         {
             // Instance a projectile
             var projectile = Instantiate(Projectile, point, Quaternion.identity);
-            projectile.Shoot(direction, charge);
+            projectile.Shoot(direction, 1f);
         }
-        
-        [SerializeField]
-        private float _chargeTime;
     }
 }

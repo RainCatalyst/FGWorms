@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3734675802521514585}
   - component: {fileID: 3734675802521514582}
   m_Layer: 0
-  m_Name: Hit
+  m_Name: BulletHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.3
+      scalar: 0.2
       minScalar: 0.05
       maxCurve:
         serializedVersion: 2
@@ -169,8 +169,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 20
-      minScalar: 7
+      scalar: 18
+      minScalar: 5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -977,7 +977,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 30
+        scalar: 12
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -1364,16 +1364,16 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 0}
-        key1: {r: 1, g: 0.7008736, b: 0, a: 0}
-        key2: {r: 1, g: 0.35868394, b: 0.11698109, a: 1}
+        key1: {r: 1, g: 1, b: 1, a: 0}
+        key2: {r: 1, g: 0.7008736, b: 0, a: 1}
         key3: {r: 0.5849056, g: 0.08497684, b: 0.1357878, a: 1}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
-        ctime1: 17733
-        ctime2: 35466
+        ctime1: 65535
+        ctime2: 18890
         ctime3: 65535
         ctime4: 0
         ctime5: 0
@@ -1382,13 +1382,13 @@ ParticleSystem:
         atime0: 0
         atime1: 2699
         atime2: 6361
-        atime3: 45104
+        atime3: 28334
         atime4: 65535
         atime5: 0
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_NumColorKeys: 4
+        m_NumColorKeys: 2
         m_NumAlphaKeys: 5
       minGradient:
         serializedVersion: 2
