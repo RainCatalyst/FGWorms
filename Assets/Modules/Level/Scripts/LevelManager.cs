@@ -40,18 +40,11 @@ namespace FGWorms.Gameplay
         private void Start()
         {
             _mapGenerator.GenerateMap(GameOptions.TerrainConfig);
-            RefreshActivePlayers();
-            RefreshTurnParticipants();
+            SpawnPlayers();
+            Cursor.lockState = CursorLockMode.Locked;
+            StartCoroutine(CoStart());
         }
 
-        // private void Update()
-        // {
-        //     if (Input.GetKeyDown(KeyCode.E))
-        //     {
-        //         NextTurn();
-        //     }
-        // }
-        
         private void OnDestroy()
         {
             if (_coEndTurn != null)
@@ -60,18 +53,18 @@ namespace FGWorms.Gameplay
 
         private void NextTurn()
         {
+            RefreshActivePlayers();
             if (_players.Count == 0)
             {
                 // No players left, draw?
-                print("No players left!");
+                FinishGame(null);
                 return;
             }
 
             if (_players.Count == 1)
             {
                 // One player won
-                print($"Player {_players[0].name} won!");
-                // SetActiveParticipant(_players[0].Turn);
+                FinishGame(_players[0]);
                 return;
             }
             
@@ -80,6 +73,7 @@ namespace FGWorms.Gameplay
                 _playerIndex = 0;
             var currentPlayer = _players[_playerIndex];
             SetActiveParticipant(currentPlayer.Turn);
+            LevelUI.Instance.TogglePlayerUI(true);
         }
 
         private void RefreshTurnParticipants()
@@ -98,18 +92,51 @@ namespace FGWorms.Gameplay
                 StopCoroutine(CoEndTurn());
         }
 
+        private void SpawnPlayers()
+        {
+            _players = new();
+            var points = _mapGenerator.GetPlayerSpawnPoints(GameOptions.PlayerCount);
+            foreach (var point in points)
+            {
+                var player = Instantiate(_playerPrefab, point, Quaternion.identity, _playerParent.transform);
+                player.Setup($"{player.GetHashCode():X}");
+                _players.Add(player);
+            }
+        }
+
         private void RefreshActivePlayers()
         {
-            _players = FindObjectsOfType<BaseCharacterController>().ToList();
+            _players = _playerParent.GetComponentsInChildren<BaseCharacterController>().ToList();
+        }
+
+        private void FinishGame(BaseCharacterController player)
+        {
+            bool draw = player == null;
+            if (draw)
+                _playerCamera.SetFollowTarget(_mapOverview, false, 18f);
+            else
+                _playerCamera.SetFollowTarget(player.Turn.CameraFocus, false);
+            // _playerCamera.SetFollowTarget(_mapOverview, false);
+            LevelUI.Instance.ShowGameOverUI(draw ? null : player.Id);
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+        private IEnumerator CoStart()
+        {
+            _playerCamera.SetFollowTarget(_mapOverview, false, 24f);
+            yield return new WaitForSecondsRealtime(1f);
+            RefreshTurnParticipants();
         }
 
         private IEnumerator CoEndTurn()
         {
+            LevelUI.Instance.TogglePlayerUI(false);
             yield return new WaitForSecondsRealtime(_turnDelay);
-            
             // Health checks
             foreach (var healthBar in HealthBar.ChangedObjects)
             {
+                if (healthBar == null)
+                    continue;
                 _playerCamera.SetFollowTarget(healthBar.transform, false);
                 yield return new WaitForSecondsRealtime(_healthDelay);
                 healthBar.DisplayAmount();
@@ -121,17 +148,25 @@ namespace FGWorms.Gameplay
             NextTurn();
         }
 
+        [Header("Player")]
+        [SerializeField]
+        private BaseCharacterController _playerPrefab;
+        [SerializeField]
+        private GameObject _playerParent;
+        [Header("References")]
         [SerializeField]
         private MapGenerator _mapGenerator;
         [SerializeField]
         private PlayerCamera _playerCamera;
         [SerializeField]
-        private List<BaseCharacterController> _players;
+        private Transform _mapOverview;
+        [Header("Turn")]
         [SerializeField]
-        private float _turnDelay = 1f;
+        private float _turnDelay = 1.5f;
         [SerializeField]
         private float _healthDelay = 0.5f;
 
+        private List<BaseCharacterController> _players;
         private int _playerIndex;
         private TurnParticipant _currentParticipant;
         private Coroutine _coEndTurn;

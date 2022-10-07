@@ -6,15 +6,15 @@ namespace FGWorms.Gameplay
     {
         public Transform FollowTarget { get; private set; }
 
-        public void SetFollowTarget(Transform target, bool allowLook)
+        public void SetFollowTarget(Transform target, bool allowLook, float overwriteDistance = 0f)
         {
             FollowTarget = target;
             _allowLook = allowLook;
+            _currentDistance = overwriteDistance > 0f ? overwriteDistance : _distance;
         }
 
         private void Awake()
         {
-            Cursor.lockState = CursorLockMode.Locked;
             _currentLookPosition = transform.position;
             _currentDistance = _distance;
         }

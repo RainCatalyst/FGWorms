@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,8 +8,15 @@ namespace FGWorms.Gameplay
     [RequireComponent(typeof(CharacterStateMachine), typeof(TurnParticipant))]
     public class BaseCharacterController : MonoBehaviour
     {
+        public string Id { get; private set; }
         public CharacterStateMachine Character { get; private set; }
         public TurnParticipant Turn { get; private set; }
+
+        public virtual void Setup(string id)
+        {
+            Id = id;
+            _nameLabel.text = id;
+        }
 
         protected virtual void UpdateTurn() { }
 
@@ -40,7 +48,9 @@ namespace FGWorms.Gameplay
         {
             Character.ChangeState(Character.StateWait);
         }
-        
+
+        [SerializeField]
+        private TMP_Text _nameLabel;
         private bool _activeTurn;
     }
 }

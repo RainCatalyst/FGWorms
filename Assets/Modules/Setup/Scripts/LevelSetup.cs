@@ -11,20 +11,6 @@ namespace FGWorms.UI
 {
     public class LevelSetup : MonoBehaviour
     {
-        [Header("Terrain Config")]
-        [SerializeField]
-        private MapConfig _currentConfig;
-        [SerializeField]
-        private TerrainConfigSO[] _terrainPresets;
-        
-        [Header("UI")]
-        [SerializeField]
-        private TMP_Dropdown _presetDropdown;
-        
-        [Header("Other")]
-        [SerializeField]
-        private MapGenerator _mapGenerator;
-
         public void SetTerrainPreset(int index)
         {
             _currentConfig.TerrainConfig = _terrainPresets[index];
@@ -36,11 +22,11 @@ namespace FGWorms.UI
             _currentConfig.Seed = (int) slider.value;
             RefreshTerrain();
         }
-
+        
         public void Begin()
         {
             GameOptions.TerrainConfig = _currentConfig;
-            GameOptions.PlayerCount = 3;
+            GameOptions.PlayerCount = (int) _playerCountSlider.value;
             // Start game
             TransitionManager.Instance.OpenLevel();
         }
@@ -56,5 +42,21 @@ namespace FGWorms.UI
             _presetDropdown.AddOptions(_terrainPresets.Select(x => x.Name).ToList());
             RefreshTerrain();
         }
+        
+        [Header("Terrain Config")]
+        [SerializeField]
+        private MapConfig _currentConfig;
+        [SerializeField]
+        private TerrainConfigSO[] _terrainPresets;
+        
+        [Header("UI")]
+        [SerializeField]
+        private TMP_Dropdown _presetDropdown;
+        [SerializeField]
+        private Slider _playerCountSlider;
+        
+        [Header("Other")]
+        [SerializeField]
+        private MapGenerator _mapGenerator;
     }
 }

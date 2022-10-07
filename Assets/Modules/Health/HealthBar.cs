@@ -28,24 +28,11 @@ namespace FGWorms.UI
             DisplayAmount();
         }
 
-        private void Update()
-        {
-            // Look at camera
-            var cameraDirection = transform.position - Camera.main.transform.position;
-            cameraDirection.y = 0;
-            transform.rotation = Quaternion.LookRotation(cameraDirection);
-        }
-
         private void OnChanged(int amount)
         {
             _currentAmount = amount;
             if (!ChangedObjects.Contains(this))
                 ChangedObjects.Add(this);
-        }
-
-        private void OnDestroy()
-        {
-            ChangedObjects.Remove(this);
         }
 
         [SerializeField]

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using FGWorms.Gameplay;
+using FGWorms.Global;
 using TMPro;
 using UnityEngine;
 
@@ -10,6 +11,17 @@ namespace FGWorms.UI
 {
     public class LevelUI : MonoSingleton<LevelUI>
     {
+        public void Restart() => TransitionManager.Instance.OpenLevel();
+        public void Menu() => TransitionManager.Instance.OpenSetup();
+        
+        public void TogglePlayerUI(bool enabled) => _playerUI.SetActive(enabled);
+
+        public void ShowGameOverUI(string winPlayerId)
+        {
+            _gameOverUI.SetActive(true);
+            _winPlayerText.text = winPlayerId == null ? "Draw!" : $"<b>Player {winPlayerId}</b> won!";
+        }
+        
         public void SetChargeValue(float value)
         {
             SetBarScale(_chargeBar, value);
@@ -45,11 +57,19 @@ namespace FGWorms.UI
             bar.localScale = scale;
         }
 
+        [Header("Player UI")]
+        [SerializeField]
+        private GameObject _playerUI;
         [SerializeField]
         private RectTransform _chargeBar;
         [SerializeField]
         private RectTransform _moveBar;
         [SerializeField]
         private TMP_Text _weaponsText;
+        [Header("GameOver UI")]
+        [SerializeField]
+        private GameObject _gameOverUI;
+        [SerializeField]
+        private TMP_Text _winPlayerText;
     }
 }

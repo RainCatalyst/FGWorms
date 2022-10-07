@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,7 +10,7 @@ namespace FGWorms.Gameplay
     {
         public UnityAction Jumped;
         public UnityAction Landed;
-
+        
         public void SetMoveAxis(Vector2 axis) => _inputAxis = axis;
 
         public void SetJump(float strength)
@@ -39,6 +41,11 @@ namespace FGWorms.Gameplay
             // Fetch references
             _controller = GetComponent<CharacterController>();
             _targetRotation = transform.rotation;
+        }
+
+        private void Start()
+        {
+            _forwardSource = LevelManager.Instance.Camera.transform;
         }
 
         private void OnEnable()
@@ -165,12 +172,9 @@ namespace FGWorms.Gameplay
             }
         }
         
-        private Vector3 GetForward() => new Vector3(forwardSource.forward.x, 0, forwardSource.forward.z).normalized;
-        private Vector3 GetRight() => new Vector3(forwardSource.right.x, 0, forwardSource.right.z).normalized;
+        private Vector3 GetForward() => new Vector3(_forwardSource.forward.x, 0, _forwardSource.forward.z).normalized;
+        private Vector3 GetRight() => new Vector3(_forwardSource.right.x, 0, _forwardSource.right.z).normalized;
         
-        [SerializeField]
-        private Transform forwardSource;
-
         [Header("Walk Settings")]
         [SerializeField]
         private float _walkSpeed = 4.0f;
@@ -208,6 +212,7 @@ namespace FGWorms.Gameplay
         private float _groundCheckDistance = 0.1f;
         
         // Components
+        private Transform _forwardSource;
         private CharacterController _controller;
         
         // Input

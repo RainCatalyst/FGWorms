@@ -37,7 +37,7 @@ namespace FGWorms.Gameplay
         [SerializeField]
         protected int Damage;
         [SerializeField]
-        private int _destroyDelay;
+        private float _destroyDelay;
         [SerializeField]
         protected GameObject HitEffect;
         [Header("Collision")]
