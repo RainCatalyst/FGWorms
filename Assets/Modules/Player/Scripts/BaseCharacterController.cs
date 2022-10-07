@@ -20,8 +20,6 @@ namespace FGWorms.Gameplay
 
             Turn.StartedTurn += OnStartTurn;
             Turn.EndedTurn += OnEndTurn;
-            
-            LevelManager.Instance.AddPlayer(this);
         }
 
         protected virtual void Update()
@@ -33,7 +31,9 @@ namespace FGWorms.Gameplay
         
         private void OnStartTurn()
         {
+            Character.ResetStamina();
             Character.ChangeState(Character.StateMove);
+            Character.Weapon.Refresh();
         }
 
         private void OnEndTurn()

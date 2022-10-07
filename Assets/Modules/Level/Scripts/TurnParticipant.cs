@@ -26,6 +26,11 @@ namespace FGWorms.Gameplay
             Active = false;
         }
 
+        public void YieldTurn()
+        {
+            LevelManager.Instance.ClearActiveParticipant(this);
+        }
+
         private void Awake()
         {
             if (_joinOnAwake)
@@ -34,7 +39,8 @@ namespace FGWorms.Gameplay
 
         private void OnDestroy()
         {
-            LevelManager.Instance.ClearActiveParticipant(this);
+            if (gameObject.scene.isLoaded)
+                YieldTurn();
         }
         
         [SerializeField]

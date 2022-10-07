@@ -6,8 +6,6 @@ namespace FGWorms.Gameplay
     [Serializable]
     public class CharacterStateMove : BaseState
     {
-        private CharacterStateMachine _sm;
-
         public override void Setup(string name, StateMachine stateMachine)
         {
             base.Setup(name, stateMachine);
@@ -17,6 +15,10 @@ namespace FGWorms.Gameplay
         public override void Update()
         {
             _sm.Movement.SetMoveAxis(_sm.Input.Move);
+            if (!_sm.UseStamina(_staminaConsumption * _sm.Input.Move.magnitude * Time.deltaTime))
+            {
+                return;
+            }
 
             if (_sm.Input.PressJump)
             {
@@ -32,5 +34,10 @@ namespace FGWorms.Gameplay
         {
             _sm.Movement.SetMoveAxis(Vector2.zero);
         }
+
+        [SerializeField]
+        private float _staminaConsumption;
+        
+        private CharacterStateMachine _sm;
     }
 }

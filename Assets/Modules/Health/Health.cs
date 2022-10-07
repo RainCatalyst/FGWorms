@@ -9,12 +9,9 @@ namespace FGWorms.Gameplay
     public class Health : MonoBehaviour
     {
         public UnityAction<int> Changed;
-        public UnityAction Finished;
+        public UnityAction Killed;
         public int Amount => _amount;
-        
-        [SerializeField]
-        private int _maxAmount;
-        private int _amount;
+        public int MaxAmount => _maxAmount;
 
         public void DealDamage(int value)
         {
@@ -22,7 +19,7 @@ namespace FGWorms.Gameplay
             Changed?.Invoke(_amount);
             if (_amount <= 0)
             {
-                Finished?.Invoke();
+                Killed?.Invoke();
             }
         }
 
@@ -36,5 +33,9 @@ namespace FGWorms.Gameplay
         {
             _amount = _maxAmount;
         }
+        
+        [SerializeField]
+        private int _maxAmount;
+        private int _amount;
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using FGWorms.UI;
 using UnityEngine;
 
 namespace FGWorms.Gameplay
@@ -31,6 +32,7 @@ namespace FGWorms.Gameplay
         public override void Update()
         {
             _chargeTimer = Mathf.Clamp(_chargeTimer + Time.deltaTime, 0, _chargeDuration);
+            LevelUI.Instance.SetChargeValue(_chargeTimer / _chargeDuration);
             
             if (_sm.Input.ReleaseShoot)
             {
@@ -41,7 +43,7 @@ namespace FGWorms.Gameplay
 
         public override void Exit()
         {
-            
+            LevelUI.Instance.SetChargeValue(0);
         }
     }
 }

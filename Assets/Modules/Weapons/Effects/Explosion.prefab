@@ -51,30 +51,65 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: 1.0023575
+      inSlope: -0.90235746
+      outSlope: -0.90235746
       tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.1
+      inSlope: -0.90235746
+      outSlope: -0.90235746
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _radius: 4
+  _terrainRadius: 3
+  _mask:
+    serializedVersion: 2
+    m_Bits: 192
+  _velocity: 5
+  _velocityFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0017776489
+      value: 1
+      inSlope: -0.04818851
+      outSlope: -0.04818851
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.6199809
+      value: 0.8656924
+      inSlope: -0.12577361
+      outSlope: -0.12577361
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      value: 0
+      inSlope: -2.4906182
+      outSlope: -2.4906182
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _radius: 3
-  _mask:
-    serializedVersion: 2
-    m_Bits: 192
-  _velocity: 5
+  _upwardsLift: 0.45
   _effect: {fileID: 8741608841531437238}
 --- !u!1001 &5369510354008113902
 PrefabInstance:

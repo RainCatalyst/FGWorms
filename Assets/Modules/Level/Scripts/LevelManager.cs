@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,28 +37,25 @@ namespace FGWorms.Gameplay
             }
         }
 
-        public void AddPlayer(TurnParticipant player)
-        {
-            _players.Add(player);
-        }
-
-        public void RemovePlayer(TurnParticipant player)
-        {
-            _players.Remove(player);
-        }
-
         private void Start()
         {
             _mapGenerator.GenerateMap(GameOptions.TerrainConfig);
+            RefreshActivePlayers();
             RefreshTurnParticipants();
         }
 
-        private void Update()
+        // private void Update()
+        // {
+        //     if (Input.GetKeyDown(KeyCode.E))
+        //     {
+        //         NextTurn();
+        //     }
+        // }
+        
+        private void OnDestroy()
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                NextTurn();
-            }
+            if (_coEndTurn != null)
+                StopCoroutine(_coEndTurn);
         }
 
         private void NextTurn()
@@ -100,9 +98,26 @@ namespace FGWorms.Gameplay
                 StopCoroutine(CoEndTurn());
         }
 
+        private void RefreshActivePlayers()
+        {
+            _players = FindObjectsOfType<BaseCharacterController>().ToList();
+        }
+
         private IEnumerator CoEndTurn()
         {
             yield return new WaitForSecondsRealtime(_turnDelay);
+            
+            // Health checks
+            foreach (var healthBar in HealthBar.ChangedObjects)
+            {
+                _playerCamera.SetFollowTarget(healthBar.transform, false);
+                yield return new WaitForSecondsRealtime(_healthDelay);
+                healthBar.DisplayAmount();
+                yield return new WaitForSecondsRealtime(_healthDelay);
+            }
+            HealthBar.ChangedObjects.Clear();
+            
+            // Prepare for next turn
             NextTurn();
         }
 
@@ -114,6 +129,8 @@ namespace FGWorms.Gameplay
         private List<BaseCharacterController> _players;
         [SerializeField]
         private float _turnDelay = 1f;
+        [SerializeField]
+        private float _healthDelay = 0.5f;
 
         private int _playerIndex;
         private TurnParticipant _currentParticipant;

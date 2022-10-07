@@ -64,8 +64,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5f180e7fc4747a8a6a1ce0b9cf16783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 10
-  _hitEffect: {fileID: 5369510354416717876, guid: 71301bcec8040d2408c7c98be45c3fa1, type: 3}
+  Damage: 5
+  _destroyDelay: 4
+  HitEffect: {fileID: 5369510354416717876, guid: 71301bcec8040d2408c7c98be45c3fa1, type: 3}
   _collisionMask:
     serializedVersion: 2
     m_Bits: 64

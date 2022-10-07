@@ -15,28 +15,24 @@ namespace FGWorms.Gameplay
         
         public override void Shoot(Vector3 direction, float velocityMultiplier)
         {
-            _rb.velocity = _speed * velocityMultiplier * direction;
+            Body.velocity = _speed * velocityMultiplier * direction;
         }
 
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
-            _rb.AddForce(Vector3.down * _gravity, ForceMode.Acceleration);
+            Body.AddForce(Vector3.down * _gravity, ForceMode.Acceleration);
         }
 
         protected override bool OnCollision(Collider col)
         {
             if (col.gameObject.TryGetComponent(out Health health))
             {
-                health.DealDamage(_damage);
+                health.DealDamage(Damage);
             }
-
-            if (col.TryGetComponent<MapDisplay>(out MapDisplay display))
-            {
-                LevelManager.Instance.Map.UpdateMap(transform.position, 3, -0.1f);
-            }
+            
             _trail.SetParent(null);
-            Instantiate(_hitEffect, transform.position, Quaternion.identity);
+            Instantiate(HitEffect, transform.position, Quaternion.identity);
             Destroy(gameObject);
             return true;
         }

@@ -10,7 +10,7 @@ namespace FGWorms.Gameplay
         public override void Shoot(Vector3 point, Vector3 direction, float charge)
         {
             // Instance a projectile
-            var Projectile = Instantiate(_projectile, point, Quaternion.identity);
+            var Projectile = Instantiate(base.Projectile, point, Quaternion.identity);
             Projectile.Shoot(direction, charge);
         }
         

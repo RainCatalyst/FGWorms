@@ -1,4 +1,5 @@
 using System;
+using FGWorms.UI;
 using UnityEngine;
 
 namespace FGWorms.Gameplay
@@ -6,15 +7,6 @@ namespace FGWorms.Gameplay
     [Serializable]
     public class CharacterStateJump : BaseState
     {
-        private CharacterStateMachine _sm;
-        
-        [SerializeField]
-        private float _chargeDuration = 1.5f;
-        [SerializeField]
-        private float _cancelDuration = 0.5f;
-
-        private float _chargeTimer;
-
         public override void Setup(string name, StateMachine stateMachine)
         {
             base.Setup(name, stateMachine);
@@ -31,6 +23,7 @@ namespace FGWorms.Gameplay
         public override void Update()
         {
             _chargeTimer = Mathf.Clamp(_chargeTimer + Time.deltaTime, 0, _chargeDuration);
+            LevelUI.Instance.SetChargeValue(_chargeTimer / _chargeDuration);
 
             if (_sm.Input.ReleaseJump)
             {
@@ -43,6 +36,7 @@ namespace FGWorms.Gameplay
                 {
                     // Jump
                     _sm.Movement.SetJump(_chargeTimer / _chargeDuration);
+                    _sm.UseStamina(_staminaConsumption);
                 }
             }
         }
@@ -50,11 +44,22 @@ namespace FGWorms.Gameplay
         public override void Exit()
         {
             _sm.Movement.Landed -= OnLanded;
+            LevelUI.Instance.SetChargeValue(0);
         }
 
         private void OnLanded()
         {
             _sm.ChangeState(_sm.StateMove);
         }
+
+        [SerializeField]
+        private float _chargeDuration = 1.5f;
+        [SerializeField]
+        private float _cancelDuration = 0.5f;
+        [SerializeField]
+        private float _staminaConsumption;
+        
+        private CharacterStateMachine _sm;
+        private float _chargeTimer;
     }
 }

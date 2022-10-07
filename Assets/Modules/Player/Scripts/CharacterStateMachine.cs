@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FGWorms.UI;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -21,6 +22,20 @@ namespace FGWorms.Gameplay
 
         public void SetController(BaseCharacterController controller) => Controller = controller;
         public void SetInput(CharacterInput input) => Input = input;
+
+        public void ResetStamina() => _currentStamina = _maxStamina;
+
+        public bool UseStamina(float amount)
+        {
+            _currentStamina = Mathf.Clamp(_currentStamina - amount, 0, _maxStamina);
+            LevelUI.Instance.SetMoveValue(_currentStamina / _maxStamina);
+            if (_currentStamina <= 0)
+            {
+                Controller.Turn.YieldTurn();
+                return false;
+            }
+            return true;
+        }
 
         public bool ChangeToWeaponState()
         {
@@ -45,6 +60,8 @@ namespace FGWorms.Gameplay
             Health = GetComponent<Health>();
             Weapon = GetComponent<CharacterWeapon>();
 
+            Health.Killed += OnKilled;
+
             StateWait.Setup("Wait", this);
             StateMove.Setup("Move", this);
             StateJump.Setup("Jump", this);
@@ -52,5 +69,14 @@ namespace FGWorms.Gameplay
         }
 
         protected override BaseState GetInitialState() => StateWait;
+
+        private void OnKilled()
+        {
+            Destroy(gameObject);
+        }
+
+        [SerializeField]
+        private float _maxStamina;
+        private float _currentStamina;
     }
 }

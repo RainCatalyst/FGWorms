@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FGWorms.Terrain;
 using UnityEngine;
 
 namespace FGWorms.Gameplay
@@ -12,11 +13,10 @@ namespace FGWorms.Gameplay
             var colliders = Physics.OverlapSphere(transform.position, _radius, _mask);
             foreach (var col in colliders)
             {
-                print(col.name);
                 float distance = GetRelativeDistance(col.transform.position);
                 if (col.gameObject.TryGetComponent<Health>(out var health))
                 {
-                    int damage = Mathf.RoundToInt(_damageFalloff.Evaluate(distance)) * _damage;
+                    int damage = Mathf.RoundToInt(_damageFalloff.Evaluate(distance) * _damage);
                     if (damage > 0)
                         health.DealDamage(damage);
                 }
@@ -25,8 +25,13 @@ namespace FGWorms.Gameplay
                 {
                     // Explosion blast
                     var direction = col.transform.position - transform.position;
-                    direction += Vector3.up * _velocity * 0.5f;
-                    character.SetBlastVelocity(direction * _velocity);
+                    direction += _upwardsLift * _velocity * Vector3.up;
+                    character.SetBlastVelocity(_velocityFalloff.Evaluate(distance) * _velocity * direction);
+                }
+                
+                if (col.TryGetComponent<MapDisplay>(out MapDisplay display))
+                {
+                    LevelManager.Instance.Map.UpdateMap(transform.position, _terrainRadius, -0.1f);
                 }
             }
             _effect.SetParent(null);
@@ -38,7 +43,7 @@ namespace FGWorms.Gameplay
             Gizmos.DrawWireSphere(transform.position, _radius);
         }
 
-        private float GetRelativeDistance(Vector3 pos) => (transform.position - pos).magnitude / _radius;
+        private float GetRelativeDistance(Vector3 pos) => Mathf.Clamp01((transform.position - pos).magnitude / _radius);
 
         [Header("Damage")]
         [SerializeField]
@@ -49,9 +54,15 @@ namespace FGWorms.Gameplay
         [SerializeField]
         private float _radius;
         [SerializeField]
+        private int _terrainRadius;
+        [SerializeField]
         private LayerMask _mask;
         [SerializeField]
         private float _velocity;
+        [SerializeField]
+        private AnimationCurve _velocityFalloff;
+        [SerializeField]
+        private float _upwardsLift = 0.45f;
         [SerializeField]
         private Transform _effect;
     }
